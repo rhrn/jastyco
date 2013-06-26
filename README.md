@@ -4,7 +4,7 @@ Tool that help develop with `jade`, `stylus` and `coffee-script`
 
 ####Installing
 ```
-npm install -g jastyco jade stylus coffee-script
+npm install -g jastyco
 ```
 
 ####Usage

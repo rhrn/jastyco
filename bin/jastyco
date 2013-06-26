@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var jastyco = require('../src/jastyco.js');
+
+jastyco.jastyco(process.argv[2]);

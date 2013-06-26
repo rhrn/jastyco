@@ -1,0 +1,30 @@
+{
+  "name": "jastyco",
+  "version": "0.0.0",
+  "description": "Watch and compile jade, stylus, coffee-script files",
+  "dependencies": {
+    "gaze": "~0.3.4",
+    "jade": "~0.31.2",
+    "stylus": "~0.32.1",
+    "coffee-script": "~1.6.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rhrn/jastyco.git"
+  },
+  "keywords": [
+    "jade",
+    "stylus",
+    "coffee-script",
+    "compile",
+    "watch"
+  ],
+  "author": "@rhrn",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/rhrn/jastyco/issues"
+  }
+}

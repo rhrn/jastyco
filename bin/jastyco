@@ -1,5 +1,22 @@
 #!/usr/bin/env node
 
+var program = require('commander');
 var jastyco = require('../src/jastyco.js');
 
-jastyco.jastyco(process.argv[2]);
+program
+  .option('-b, --build', 'build')
+  .option('-s, --src <src>', 'source directory')
+  .option('-d, --dest <dest>', 'desctination directory')
+  .option('-p, --patterns <patterns>', 'files patterns')
+  .usage('[options] patterns');
+
+program.parse(process.argv);
+
+var options = {
+  build: program.build || false,
+  src: program.src || '.',
+  dest: program.dest || '.',
+  patterns: program.patterns || program.args[0] || "**/*.jade **/*.coffee **/*.styl"
+};
+
+jastyco.jastyco(options);

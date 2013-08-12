@@ -36,36 +36,62 @@ var jastyco = {
   },
 
   file: function(options, filepath) {
-    
-    //console.log ('cwd', cwd, filepath);
-    //console.log ('F:', options, filepath);
 
-    if (filepath.charAt(0) == '/' || options.src == options.dest) {
+    var indexExt, indexDir, srcext, srcfile = '',
+      srcdir, name, destext, destdir, destfile, filedest;
+
+    if (filepath.charAt(0) == '/') {
       filepath = filepath.replace(cwd + '/', '');
-      options.dest = '';
-      options.src = '';
-    } else {
-      options.dest += '/';
-      options.src += '/';
     }
 
+    indexExt = filepath.lastIndexOf('.');
+    indexDir = filepath.lastIndexOf('/');
 
-    index    = filepath.lastIndexOf('.');
-    //console.log('index', index);
-    filename = filepath.substr(0, index);
-    //console.log('filename', filename);
-    ext      = filepath.substr(index + 1);
-    //console.log('ext', ext);
-    filedest = options.dest + filename + jastyco.plugins[ext].ext;
-    //console.log('filedest', filedest);
+    srcext   = filepath.substr(indexExt + 1);
+    srcfile  = filepath.substr(indexDir + 1);
+    srcdir   = filepath.substr(0, filepath.length - srcfile.length);
+    name     = srcfile.substr(0, srcfile.length - (srcext.length + 1));
+
+    destext  = jastyco.plugins[srcext].ext;
+    if (options.src.length > 2) {
+      srcdir = srcdir.substr(options.src.length);
+    }
+    destdir  = options.dest + srcdir;
+    destfile = name + destext;
+    filedest = destdir + destfile;
+
+    jastyco.mkdir(destdir);
 
     return {
-      index: index,
       filepath: filepath,
-      filename: filename,
-      ext: ext,
-      cwd: cwd,
+      srcfile:  srcfile,
+      srcdir:   srcdir,
+      srcext:   srcext,
+      name:     name,
+      destdir:  destdir,
+      destext:  destext,
       filedest: filedest
+    }
+
+  },
+
+  mkdir: function(path) {
+
+    var dirs = path.split('/'),
+      paths = [], currentDir = '';
+    
+    dirs.forEach(function(dir) {
+      if (dir) {
+        currentDir += dir + '/';
+        paths.push(currentDir);
+      }
+    });
+
+    for (var i in paths) {
+
+      if (!fs.existsSync(paths[i])) {
+        fs.mkdirSync(paths[i]);
+      }
     }
 
   },
@@ -73,18 +99,20 @@ var jastyco = {
   compile: function(event, file, options) {
 
     fs.readFile(file.filepath, function(err, data) {
-      //console.log ('complie', event, file, options, data);
+
       try {
-        compiled = jastyco.plugins[file.ext].compile(data.toString(), options);
+
+        compiled = jastyco.plugins[file.srcext].compile(data.toString(), options);
         fs.writeFile(file.filedest, compiled, function(err) {
           if (!err) {
             console.log('%s %s to %s', event, file.filepath, file.filedest);
-            delete data;
           }
         });
+
       } catch (e) {
         console.log(e);
       }
+
     });
 
   }
@@ -92,7 +120,15 @@ var jastyco = {
 
 exports.jastyco = function (options) {
 
-  console.log('options', options);
+  if (options.dest != '' && options.dest.charAt(options.dest.length - 1) != '/') {
+    options.dest += '/';
+  }
+
+  if (options.src.charAt(options.src.length - 1) != '/') {
+    options.src += '/';
+  }
+
+  console.log ('options', options);
 
   if (options.build) {
     globule = require('globule');
@@ -112,17 +148,16 @@ exports.jastyco = function (options) {
 
   patterns = options.patterns.split(" ");
 
-  var compileOptions = {
-    pretty: true,
-    bare: true
-  };
-
   var compileOptions;
 
   if (options.build) {
+
     var files;
+
     for (var i in patterns) {
+
       files = globule.find(patterns[i]);
+
       for (var j in files) {
 
         file = jastyco.file(options, files[j]);
@@ -133,23 +168,22 @@ exports.jastyco = function (options) {
           filename: file.filepath
         }
 
-
-        //compileOptions.filename = file.filepath;
-
         jastyco.compile('build', file, compileOptions);
+
       }
     }
+
   } else {
+
+    var file;
 
     gaze(patterns, function(err, watcher) {
 
-      var file;
-
       this.on('all', function(event, filepath) {
+
+        file = jastyco.file(options, filepath);
         
         if (event === 'changed' || event === 'added') {
-
-          file = jastyco.file(options, filepath);
 
           compileOptions = {
             pretty: true,
@@ -162,6 +196,7 @@ exports.jastyco = function (options) {
         } else if (event === 'deleted') {
           console.log('delete, not implemented', file.filepath);
         }
+
       });
 
     });

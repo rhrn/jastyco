@@ -2,12 +2,13 @@
 
 var program = require('commander');
 var jastyco = require('../src/jastyco.js');
+var defaultPatterns = '**/*.jade **/*.coffee **/*.styl';
 
 program
-  .option('-b, --build', 'build')
-  .option('-s, --src <src>', 'source directory')
-  .option('-d, --dest <dest>', 'desctination directory')
-  .option('-p, --patterns <patterns>', 'files patterns')
+  .option('-b, --build', 'compile sources')
+  .option('-s, --src <src>', 'source directory. current default')
+  .option('-d, --dest <dest>', 'destination directory. current default')
+  .option('-p, --patterns <patterns>', 'files patterns. "' + defaultPatterns + '" default')
   .usage('[options] patterns');
 
 program.parse(process.argv);
@@ -16,7 +17,7 @@ var options = {
   build: program.build || false,
   src: program.src || '',
   dest: program.dest || '',
-  patterns: program.patterns || program.args[0] || "**/*.jade **/*.coffee **/*.styl"
+  patterns: program.patterns || program.args[0] || defaultPatterns
 };
 
 jastyco.jastyco(options);

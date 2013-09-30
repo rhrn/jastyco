@@ -115,12 +115,22 @@ var jastyco = {
 
     });
 
+  },
+
+  copy: function(file) {
+    fs.readFile(file.filepath, function(err, data) {
+      fs.writeFile(file.destdir + file.srcfile, data, function(err) {
+        if (!err) {
+          console.log('copy %s to %s', file.filepath, file.destdir + file.srcfile);
+        }
+      });
+    });
   }
 };
 
 exports.jastyco = function (options) {
 
-  if (options.dest != '' && options.dest.charAt(options.dest.length - 1) != '/') {
+  if (options.dest.charAt(options.dest.length - 1) != '/') {
     options.dest += '/';
   }
 
@@ -128,7 +138,7 @@ exports.jastyco = function (options) {
     options.src += '/';
   }
 
-  console.log ('options', options);
+  console.log ('options:', "\n", options);
 
   if (options.build) {
     globule = require('globule');
@@ -148,17 +158,22 @@ exports.jastyco = function (options) {
 
   patterns = options.patterns.split(" ");
 
+  copy = false;
+  if (options.copy != '') {
+    copy = options.copy.split(" ");
+  }
+
   var compileOptions;
 
   if (options.build) {
 
-    var files;
+    var files, i, j;
 
-    for (var i in patterns) {
+    for (i in patterns) {
 
       files = globule.find(patterns[i]);
 
-      for (var j in files) {
+      for (j in files) {
 
         file = jastyco.file(options, files[j]);
 
@@ -171,6 +186,25 @@ exports.jastyco = function (options) {
         jastyco.compile('build', file, compileOptions);
 
       }
+
+    }
+
+    if (copy) {
+
+      for (i in copy) {
+
+        files = globule.find(copy[i]);
+        
+        for (j in files) {
+
+          file = jastyco.file(options, files[j]);
+
+          jastyco.copy(file);
+
+        }
+
+      }
+
     }
 
   } else {
@@ -200,6 +234,23 @@ exports.jastyco = function (options) {
       });
 
     });
+
+
+    if (copy) {
+
+      gaze(options.copy, function(err, watcher) {
+
+        this.on('all', function(event, filepath) {
+
+          file = jastyco.file(options, filepath);
+
+          jastyco.copy(file);
+
+        });
+
+      });
+
+    }
 
   }
 };

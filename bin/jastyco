@@ -25,6 +25,7 @@ program
   .option('-s, --src <src>', 'source directory. current default')
   .option('-d, --dest <dest>', 'destination directory. current default')
   .option('-p, --patterns <patterns>', 'files patterns. "' + defaultPatterns + '" default')
+  .option('-cp, --copy <patterns>', 'files to copy patterns')
   .option('-c, --config <config>', 'config file. "jastyco.json" default')
   .usage('[options] patterns');
 
@@ -34,6 +35,7 @@ var options = {
   build: program.build || false,
   src: program.src || '',
   dest: program.dest || '',
+  copy: program.copy || '',
   patterns: program.patterns || program.args[0] || defaultPatterns
 };
 

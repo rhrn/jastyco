@@ -1,6 +1,6 @@
 var fs = require('fs');
 var gaze = require('gaze');
-var cwd = process.cwd();
+var filetools = require('./filetools');
 
 var jade, coffee, stylus, globule;
 
@@ -8,21 +8,18 @@ var jastyco = {
 
   plugins: {
     jade: {
-      ext: '.html',
       compile: function(src, options) {
         var copmiled = jade.compile(src, options);
         return copmiled();
       }
     },
     coffee: {
-      ext: '.js',
       compile: function(src, options) {
         var copmiled = coffee.compile(src, options);
         return copmiled;
       }
     },
     styl: {
-      ext: '.css',
       compile: function(src, options) {
         var copmiled;
         stylus(src)
@@ -35,77 +32,26 @@ var jastyco = {
     }
   },
 
-  file: function(options, filepath) {
+  file: function(srcpath, options) {
 
-    var indexExt, indexDir, srcext, srcfile = '',
-      srcdir, name, destext, destdir, destfile, filedest;
+    var file = filetools.info(srcpath, options);
 
-    if (filepath.charAt(0) == '/') {
-      filepath = filepath.replace(cwd + '/', '');
-    }
+    filetools.mkdir(file.destdir);
 
-    indexExt = filepath.lastIndexOf('.');
-    indexDir = filepath.lastIndexOf('/');
-
-    srcext   = filepath.substr(indexExt + 1);
-    srcfile  = filepath.substr(indexDir + 1);
-    srcdir   = filepath.substr(0, filepath.length - srcfile.length);
-    name     = srcfile.substr(0, srcfile.length - (srcext.length + 1));
-
-    destext  = jastyco.plugins[srcext].ext;
-    if (options.src.length > 2) {
-      srcdir = srcdir.substr(options.src.length);
-    }
-    destdir  = options.dest + srcdir;
-    destfile = name + destext;
-    filedest = destdir + destfile;
-
-    jastyco.mkdir(destdir);
-
-    return {
-      filepath: filepath,
-      srcfile:  srcfile,
-      srcdir:   srcdir,
-      srcext:   srcext,
-      name:     name,
-      destdir:  destdir,
-      destext:  destext,
-      filedest: filedest
-    }
-
-  },
-
-  mkdir: function(path) {
-
-    var dirs = path.split('/'),
-      paths = [], currentDir = '';
-    
-    dirs.forEach(function(dir) {
-      if (dir) {
-        currentDir += dir + '/';
-        paths.push(currentDir);
-      }
-    });
-
-    for (var i in paths) {
-
-      if (!fs.existsSync(paths[i])) {
-        fs.mkdirSync(paths[i]);
-      }
-    }
+    return file;
 
   },
 
   compile: function(event, file, options) {
 
-    fs.readFile(file.filepath, function(err, data) {
+    fs.readFile(file.srcpath, function(err, data) {
 
       try {
 
         compiled = jastyco.plugins[file.srcext].compile(data.toString(), options);
-        fs.writeFile(file.filedest, compiled, function(err) {
+        fs.writeFile(file.destpath, compiled, function(err) {
           if (!err) {
-            console.log('%s %s to %s', event, file.filepath, file.filedest);
+            console.log('%s %s to %s', event, file.srcpath, file.destpath);
           }
         });
 
@@ -118,10 +64,10 @@ var jastyco = {
   },
 
   copy: function(file) {
-    fs.readFile(file.filepath, function(err, data) {
-      fs.writeFile(file.destdir + file.srcfile, data, function(err) {
+    fs.readFile(file.srcpath, function(err, data) {
+      fs.writeFile(file.destcopy, data, function(err) {
         if (!err) {
-          console.log('copy %s to %s', file.filepath, file.destdir + file.srcfile);
+          console.log('copy %s to %s', file.srcpath, file.destcopy);
         }
       });
     });
@@ -175,12 +121,12 @@ exports.jastyco = function (options) {
 
       for (j in files) {
 
-        file = jastyco.file(options, files[j]);
+        file = jastyco.file(files[j], options);
 
         compileOptions = {
           pretty: true,
           bare: true,
-          filename: file.filepath
+          filename: file.srcpath
         }
 
         jastyco.compile('build', file, compileOptions);
@@ -197,7 +143,7 @@ exports.jastyco = function (options) {
         
         for (j in files) {
 
-          file = jastyco.file(options, files[j]);
+          file = jastyco.file(files[j], options);
 
           jastyco.copy(file);
 
@@ -213,36 +159,35 @@ exports.jastyco = function (options) {
 
     gaze(patterns, function(err, watcher) {
 
-      this.on('all', function(event, filepath) {
+      this.on('all', function(event, srcpath) {
 
-        file = jastyco.file(options, filepath);
+        file = jastyco.file(srcpath, options);
         
         if (event === 'changed' || event === 'added') {
 
           compileOptions = {
             pretty: true,
             bare: true,
-            filename: file.filepath
+            filename: file.srcpath
           }
 
           jastyco.compile(event, file, compileOptions);
 
         } else if (event === 'deleted') {
-          console.log('delete, not implemented', file.filepath);
+          console.log('delete, not implemented', file.srcpath);
         }
 
       });
 
     });
 
-
     if (copy) {
 
       gaze(options.copy, function(err, watcher) {
 
-        this.on('all', function(event, filepath) {
+        this.on('all', function(event, srcpath) {
 
-          file = jastyco.file(options, filepath);
+          file = jastyco.file(srcpath, options);
 
           jastyco.copy(file);
 

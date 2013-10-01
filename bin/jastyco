@@ -29,4 +29,6 @@ config = utils.readConfig(configPath);
 
 options = utils.extend(options, config);
 
+options.cwd = cwd;
+
 jastyco.jastyco(options);

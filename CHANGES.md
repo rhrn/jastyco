@@ -1,3 +1,8 @@
+# v0.0.3
+  * copy files by patterns on changes
+  * tests and increased stability
+  * update version to latest: jade, stylus
+
 # v0.0.2
   * build feature: compile exists files
   * src-dest feature: select source and destination directory

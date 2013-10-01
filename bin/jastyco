@@ -1,24 +1,12 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
 var program = require('commander');
 var jastyco = require('../src/jastyco.js');
+var utils = require('../src/utils.js');
 var cwd = process.cwd();
 
 var defaultPatterns = '**/*.jade **/*.coffee **/*.styl';
-var config = {},
-  configPath = cwd + '/jastyco.json';
-
-function extend(one, two) {
-  var extended = {}, key;
-  for (key in one) {
-    extended[key] = one[key];
-  }
-  for (key in two) {
-    extended[key] = two[key];
-  }
-  return extended;
-}
+var configPath = utils.configPath(cwd, 'jastyco.json');
 
 program
   .option('-b, --build', 'compile sources')
@@ -31,23 +19,14 @@ program
 
 program.parse(process.argv);
 
-var options = {
-  build: program.build || false,
-  src: program.src || '',
-  dest: program.dest || '',
-  copy: program.copy || '',
-  patterns: program.patterns || program.args[0] || defaultPatterns
-};
+var options = utils.defaultOptions(program, defaultPatterns);
 
 if (program.config) {
-  configPath = cwd + '/' + program.config;
+  configPath = utils.configPath(cwd, program.config);
 }
 
-if (fs.existsSync(configPath)) {
-  // allow json strict mode
-  config = JSON.parse(fs.readFileSync(configPath).toString());
-}
+config = utils.readConfig(configPath);
 
-options = extend(options, config);
+options = utils.extend(options, config);
 
 jastyco.jastyco(options);

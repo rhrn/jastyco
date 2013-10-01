@@ -1,0 +1,7 @@
+{
+  "build":false,
+  "src":"src",
+  "dest":"dest",
+  "copy":"**/*.copy",
+  "patterns":"**/*.file"
+}

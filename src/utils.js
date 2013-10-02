@@ -28,6 +28,7 @@ module.exports = {
       src: program.src || '',
       dest: program.dest || '',
       copy: program.copy || '',
+      delete: program.delete || false,
       patterns: program.patterns || program.args[0] || defaultPatterns
     };
   }, 

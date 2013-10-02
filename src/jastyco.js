@@ -174,7 +174,13 @@ exports.jastyco = function (options) {
           jastyco.compile(event, file, compileOptions);
 
         } else if (event === 'deleted') {
-          console.log('delete, not implemented', file.srcpath);
+          if (options.delete === true) {
+            fs.unlink(file.destpath, function(err) {
+              console.log('deleted ', file.destpath);
+            });
+          } else {
+            console.log('did not deleted ', file.destpath);
+          }
         }
 
       });

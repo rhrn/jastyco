@@ -15,6 +15,7 @@ program
   .option('-p, --patterns <patterns>', 'files patterns. "' + defaultPatterns + '" default')
   .option('-cp, --copy <patterns>', 'files to copy patterns')
   .option('-c, --config <config>', 'config file. "jastyco.json" default')
+  .option('-X, --delete', 'delete dest file on delete source. "false" default')
   .usage('[options] patterns');
 
 program.parse(process.argv);

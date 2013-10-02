@@ -39,6 +39,8 @@ describe('options test', function() {
     options.dest.should.equal('');
     options.should.have.property('copy');
     options.copy.should.equal('');
+    options.should.have.property('delete');
+    options.delete.should.equal(false);
     options.should.have.property('patterns');
     options.patterns.should.equal('defaultPattern');
 

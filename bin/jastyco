@@ -13,7 +13,7 @@ program
   .option('-s, --src <src>', 'source directory. current default')
   .option('-d, --dest <dest>', 'destination directory. current default')
   .option('-p, --patterns <patterns>', 'files patterns. "' + defaultPatterns + '" default')
-  .option('-cp, --copy <patterns>', 'files to copy patterns')
+  .option('-C, --copy <patterns>', 'copy files on change by patterns')
   .option('-c, --config <config>', 'config file. "jastyco.json" default')
   .option('-X, --delete', 'delete dest file on delete source. "false" default')
   .usage('[options] patterns');

@@ -12,7 +12,7 @@ program
   .option('-b, --build', 'compile sources')
   .option('-s, --src <src>', 'source directory. current default')
   .option('-d, --dest <dest>', 'destination directory. current default')
-  .option('-p, --patterns <patterns>', 'files patterns. "' + defaultPatterns + '" default')
+  .option('-p, --patterns <patterns>', 'files compile by patterns. "' + defaultPatterns + '" default')
   .option('-C, --copy <patterns>', 'copy files on change by patterns')
   .option('-c, --config <config>', 'config file. "jastyco.json" default')
   .option('-X, --delete', 'delete dest file on delete source. "false" default')

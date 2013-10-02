@@ -9,7 +9,8 @@ var defaultPatterns = '**/*.jade **/*.coffee **/*.styl';
 var configPath = utils.configPath(cwd, 'jastyco.json');
 
 program
-  .option('-b, --build', 'compile sources')
+  .version('0.0.4')
+  .option('-b, --build', 'compile sources in batch mode. "false" default')
   .option('-s, --src <src>', 'source directory. current default')
   .option('-d, --dest <dest>', 'destination directory. current default')
   .option('-p, --patterns <patterns>', 'files compile by patterns. "' + defaultPatterns + '" default')

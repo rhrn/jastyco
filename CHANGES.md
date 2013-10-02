@@ -1,3 +1,7 @@
+# v0.0.4
+  * copy file command option fix
+  * delete dest file on delete source file
+
 # v0.0.3
   * copy files by patterns on changes
   * tests and increased stability

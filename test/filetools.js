@@ -1,7 +1,8 @@
 var should = require('chai').should();
 var filetools = require('../src/filetools');
+var fs = require('fs');
 
-var file, srcpath, options;
+var file, srcpath, options, destdir;
 
 describe('filetools test', function() {
 
@@ -96,6 +97,21 @@ describe('filetools test', function() {
       file.destcopy.should.equal(destcopy);
 
     });
+
+  });
+
+  it('should be create directory', function(done) {
+
+    var mkdir = 'test/data/mkdir';
+    destdir = mkdir + '/public/static';
+
+    filetools.rmdir(mkdir);
+    filetools.mkdir(destdir);
+
+    if (fs.statSync(destdir).isDirectory()) {
+      filetools.rmdir(mkdir);
+      done();
+    }
 
   });
 

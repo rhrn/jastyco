@@ -79,6 +79,29 @@ module.exports = {
       }
     }
 
+  },
+
+  rmdir: function(path) {
+
+    if (fs.existsSync(path)) {
+
+      var _this = this;
+      var curPath;
+
+      fs.readdirSync(path).forEach(function(file, index) {
+
+        curPath = path + "/" + file;
+
+        if (fs.statSync(curPath).isDirectory()) {
+          _this.rmdir(curPath);
+        } else {
+          fs.unlinkSync(curPath);
+        }
+
+      });
+
+      fs.rmdirSync(path);
+    }
   }
 
 };

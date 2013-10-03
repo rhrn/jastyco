@@ -34,7 +34,12 @@ module.exports = {
     srcfile  = srcpath.substr(indexDir + 1);
     srcdir   = srcpath.substr(0, srcpath.length - srcfile.length);
     name     = srcfile.substr(0, srcfile.length - (srcext.length + 1));
-    destext  = this.plugins[srcext].ext;
+
+    if (this.plugins[srcext]) {
+      destext = this.plugins[srcext].ext;
+    } else {
+      destext = '.' + srcext;
+    }
 
     if (options.src.length > 2) {
       srcdir = srcdir.substr(options.src.length);

@@ -189,7 +189,7 @@ exports.jastyco = function (options) {
 
     if (copy) {
 
-      gaze(options.copy, function(err, watcher) {
+      gaze(copy, function(err, watcher) {
 
         this.on('all', function(event, srcpath) {
 

@@ -87,13 +87,14 @@ Config `jastyco.json`
   "src": "src",
   "dest": "dest",
   "patterns": "**/*.coffee **/*.styl",
-  "copy": "**/*.jade",
+  "copy": "**/*.jade src/**/*.css src/**/*.eot src/**/*.svg src/**/*.ttf src/**/*.woff",
   "delete": true
 }
 ```
 
 Note: `copy` useful for frameworks which self compile,  
-for example `express` use `jade` as template engine
+for example `express` use `jade` as template engine  
+or css, js, fonts...
 
 #### Known issues
 * not watch for new directories

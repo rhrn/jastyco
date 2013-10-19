@@ -1,3 +1,7 @@
+# v0.0.5
+  * fix multiple copy pattern
+  * fix unknown extension in file info
+
 # v0.0.4
   * copy file command option fix
   * delete dest file on delete source file

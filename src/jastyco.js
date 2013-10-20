@@ -76,13 +76,9 @@ var jastyco = {
 
 exports.jastyco = function (options) {
 
-  if (options.dest.charAt(options.dest.length - 1) != '/') {
-    options.dest += '/';
-  }
+  options.dest = filetools.prepPath(options.dest);
 
-  if (options.src.charAt(options.src.length - 1) != '/') {
-    options.src += '/';
-  }
+  options.src = filetools.prepPath(options.src);
 
   console.log ('options:', "\n", options);
 

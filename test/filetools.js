@@ -2,7 +2,7 @@ var should = require('chai').should();
 var filetools = require('../src/filetools');
 var fs = require('fs');
 
-var file, srcpath, options, destdir;
+var file, srcpath, options, destdir, path;
 
 describe('filetools test', function() {
 
@@ -112,6 +112,26 @@ describe('filetools test', function() {
       filetools.rmdir(mkdir);
       done();
     }
+
+  });
+
+
+  it('should be right path', function() {
+    
+    path = filetools.prepPath();
+    path.should.equal('');
+
+    path = filetools.prepPath('/');
+    path.should.equal('');
+
+    path = filetools.prepPath('src');
+    path.should.equal('src/');
+
+    path = filetools.prepPath('/dest');
+    path.should.equal('dest/');
+
+    path = filetools.prepPath('/dest/public');
+    path.should.equal('dest/public/');
 
   });
 

@@ -107,6 +107,22 @@ module.exports = {
 
       fs.rmdirSync(path);
     }
-  }
+  },
 
+  prepPath: function(path) {
+
+    if (typeof path !== 'string' || path === '' || (path.length === 1 && path === '/')) {
+      return '';
+    }
+
+    if (path.charAt(0) === '/') {
+      path = path.substr(1);
+    }
+
+    if (path.charAt(path.length - 1) !== '/') {
+      path += '/';
+    }
+
+    return path;
+  }
 };

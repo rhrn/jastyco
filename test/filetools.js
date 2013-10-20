@@ -2,7 +2,7 @@ var should = require('chai').should();
 var filetools = require('../src/filetools');
 var fs = require('fs');
 
-var file, srcpath, options, destdir, path;
+var file, srcpath, options, destdir, path, patterns;
 
 describe('filetools test', function() {
 
@@ -132,6 +132,19 @@ describe('filetools test', function() {
 
     path = filetools.prepPath('/dest/public');
     path.should.equal('dest/public/');
+
+  });
+
+  it('should be splited by space', function() {
+
+    patterns = '  **/*.jade       **/*.styl   *.coffee  ';
+    patterns = filetools.patternsToArray(patterns);
+
+    patterns.should.be.a('array');
+    patterns.should.have.length(3);
+    patterns[0].should.be.equal('**/*.jade');
+    patterns[1].should.be.equal('**/*.styl');
+    patterns[2].should.be.equal('*.coffee');
 
   });
 

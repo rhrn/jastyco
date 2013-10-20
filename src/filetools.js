@@ -124,5 +124,9 @@ module.exports = {
     }
 
     return path;
+  },
+
+  patternsToArray: function(pattern) {
+    return pattern.replace(/^\s+|\s+$/g, '').split(/\s+/);
   }
 };

@@ -98,11 +98,11 @@ exports.jastyco = function (options) {
     stylus = require('stylus');
   }
 
-  patterns = options.patterns.split(" ");
+  patterns = filetools.patternsToArray(options.patterns);
 
   copy = false;
   if (options.copy != '') {
-    copy = options.copy.split(" ");
+    copy = filetools.patternsToArray(options.copy);
   }
 
   var compileOptions;

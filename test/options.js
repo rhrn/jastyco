@@ -1,5 +1,6 @@
 var should = require('chai').should();
 var utils = require('../src/utils');
+var options = utils.defaults();
 
 var one, two, three, options, program, configPath,
   config;
@@ -29,7 +30,7 @@ describe('options test', function() {
 
   it('should be default options', function() {
 
-    options = utils.defaultOptions({}, 'defaultPattern');
+    options = utils.extractOptions(options, options);
 
     options.should.have.property('build');
     options.build.should.equal(false);
@@ -42,7 +43,7 @@ describe('options test', function() {
     options.should.have.property('delete');
     options.delete.should.equal(false);
     options.should.have.property('patterns');
-    options.patterns.should.equal('defaultPattern');
+    options.patterns.should.equal(options.patterns);
 
   });
 
@@ -53,11 +54,12 @@ describe('options test', function() {
       build: true,
       src: 'src',
       dest: 'dest',
-      copy: 'copy',
-      patterns: 'patterns'
-    };
+      copy: 'copy', 
+      delete: true,
+      patterns: 'patterns', 
+    }
 
-    options = utils.defaultOptions(program, 'defaultPattern');
+    options = utils.extend(options, program);
 
     options.should.have.property('build');
     options.build.should.equal(true);
@@ -67,6 +69,8 @@ describe('options test', function() {
     options.dest.should.equal('dest');
     options.should.have.property('copy');
     options.copy.should.equal('copy');
+    options.should.have.property('delete');
+    options.delete.should.equal(true);
     options.should.have.property('patterns');
     options.patterns.should.equal('patterns');
 

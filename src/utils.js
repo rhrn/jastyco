@@ -1,6 +1,22 @@
 var fs = require('fs');
+var options = {}, keys = {}, key = '';
+var cwd = process.cwd();
 
 module.exports = {
+
+  defaults: function() {
+
+    return {
+      src: '',
+      dest: '',
+      delete: false,
+      build: false,
+      copy: '',
+      patterns: '**/*.jade **/*.coffee **/*.styl',
+      configPath: this.configPath(cwd, 'jastyco.json')
+    };
+
+  },
 
   extend: function extend(one, two) {
     var extended = {}, key;
@@ -13,7 +29,9 @@ module.exports = {
     return extended;
   },
 
-  defaultOptions: function(program, defaultPatterns) {
+  extractOptions: function(defaultOptions, program) {
+
+    keys = Object.keys(defaultOptions);
 
     if (program === undefined) {
       program = {args:[]};
@@ -23,14 +41,18 @@ module.exports = {
       }
     }
 
-    return {
-      build: program.build || false,
-      src: program.src || '',
-      dest: program.dest || '',
-      copy: program.copy || '',
-      delete: program.delete || false,
-      patterns: program.patterns || program.args[0] || defaultPatterns
-    };
+    for (var i in keys) {
+      key = keys[i];
+      if (program.hasOwnProperty(key)) {
+        options[key] = program[key];
+      }
+    }
+
+    if (program.args.length) {
+      options.patterns = program.args[0];
+    }
+
+    return options;
   }, 
 
   configPath: function(cwd, file) {

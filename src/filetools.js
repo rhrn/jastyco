@@ -20,10 +20,10 @@ module.exports = {
 
   info: function(srcpath, options) {
 
-    var indexExt, indexDir, srcext, srcfile = '',
+    var indexExt, indexDir, srcext, srcfile,
       srcdir, name, destext, destdir, destfile, destpath;
 
-    if (srcpath.charAt(0) == '/') {
+    if (srcpath.charAt(0) === '/') {
       srcpath = srcpath.replace(options.cwd + '/', '');
     }
 
@@ -32,8 +32,8 @@ module.exports = {
 
     srcext   = srcpath.substr(indexExt + 1);
     srcfile  = srcpath.substr(indexDir + 1);
-    srcdir   = srcpath.substr(0, srcpath.length - srcfile.length);
     name     = srcfile.substr(0, srcfile.length - (srcext.length + 1));
+    srcdir   = srcpath.substr(0, srcpath.length - srcfile.length);
 
     if (this.plugins[srcext]) {
       destext = this.plugins[srcext].ext;
@@ -41,7 +41,7 @@ module.exports = {
       destext = '.' + srcext;
     }
 
-    if (options.src.length > 2) {
+    if (options.src.length > 0) {
       srcdir = srcdir.substr(options.src.length);
     }
 
@@ -61,7 +61,7 @@ module.exports = {
       destfile: destfile,
       destpath: destpath,
       destcopy: destcopy
-    }
+    };
 
   },
 

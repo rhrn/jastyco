@@ -3,17 +3,16 @@
 var program = require('commander');
 var jastyco = require('../src/jastyco.js');
 var utils = require('../src/utils.js');
+var options = utils.defaults();
 var cwd = process.cwd();
-
-var defaultPatterns = '**/*.jade **/*.coffee **/*.styl';
-var configPath = utils.configPath(cwd, 'jastyco.json');
+var cli;
 
 program
   .version('0.0.5')
   .option('-b, --build', 'compile sources in batch mode. "false" default')
   .option('-s, --src <src>', 'source directory. current default')
   .option('-d, --dest <dest>', 'destination directory. current default')
-  .option('-p, --patterns <patterns>', 'files compile by patterns. "' + defaultPatterns + '" default')
+  .option('-p, --patterns <patterns>', 'files compile by patterns. "' + options.patterns + '" default')
   .option('-C, --copy <patterns>', 'copy files on change by patterns')
   .option('-c, --config <config>', 'config file. "jastyco.json" default')
   .option('-X, --delete', 'delete dest file on delete source. "false" default')
@@ -21,15 +20,17 @@ program
 
 program.parse(process.argv);
 
-var options = utils.defaultOptions(program, defaultPatterns);
+cli = utils.extractOptions(options, program);
 
-if (program.config) {
-  configPath = utils.configPath(cwd, program.config);
+if (cli.config) {
+  options.configPath = utils.configPath(cwd, cli.config);
 }
 
-config = utils.readConfig(configPath);
+config = utils.readConfig(options.configPath);
 
 options = utils.extend(options, config);
+
+options = utils.extend(options, cli);
 
 options.cwd = cwd;
 

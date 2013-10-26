@@ -178,8 +178,10 @@ describe('filetools test', function() {
 
   it('should be splited by space', function() {
 
+    options = utils.defaults();
+
     patterns = '  **/*.jade       **/*.styl   *.coffee  ';
-    patterns = filetools.patternsToArray(patterns);
+    patterns = filetools.patternsToArray(patterns, options);
 
     patterns.should.be.a('array');
     patterns.should.have.length(3);

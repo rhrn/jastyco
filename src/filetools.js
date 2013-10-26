@@ -126,7 +126,10 @@ module.exports = {
     return path;
   },
 
-  patternsToArray: function(pattern) {
-    return pattern.replace(/^\s+|\s+$/g, '').split(/\s+/);
+  patternsToArray: function(pattern, options) {
+    var patterns = pattern.replace(/^\s+|\s+$/g, '').split(/\s+/);
+    return patterns.map(function(pattern) {
+      return options.src + pattern;
+    });
   }
 };

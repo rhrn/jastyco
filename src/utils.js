@@ -3,11 +3,38 @@ var json5 = require('json5');
 var options = {}, keys = {}, key = '';
 var cwd = process.cwd();
 
+var optionToJson = function(opt) {
+
+  if (opt.charAt(0) !== '{') {
+    opt = '{' + opt;
+  }
+
+  if (opt.charAt(opt.length) !== '}') {
+    opt += '}';
+  }
+
+  try {
+    return json5.parse(opt);
+  } catch (e) {
+    return {};
+  }
+
+};
+
 module.exports = {
 
   defaults: function() {
 
     return {
+      jade: {
+        pretty: true
+      },
+      coffee: {
+        bare: true
+      },
+      styl: {
+        nib: true
+      },
       src: '',
       dest: '',
       delete: false,
@@ -32,6 +59,8 @@ module.exports = {
 
   extractOptions: function(defaultOptions, program) {
 
+    var _this = this;
+
     keys = Object.keys(defaultOptions);
 
     if (program === undefined) {
@@ -44,8 +73,19 @@ module.exports = {
 
     for (var i in keys) {
       key = keys[i];
+
       if (program.hasOwnProperty(key)) {
-        options[key] = program[key];
+        if (
+          (key === 'jade'
+          || key === 'coffee'
+          || key === 'styl')
+          && typeof program[key] === 'string'
+        ) {
+          options[key] = _this.extend(defaultOptions[key], optionToJson(program[key]));
+        } else {
+          options[key] = program[key];
+        }
+
       }
     }
 

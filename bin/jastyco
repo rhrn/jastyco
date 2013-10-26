@@ -15,7 +15,10 @@ program
   .option('-p, --patterns <patterns>', 'files compile by patterns. "' + options.patterns + '" default')
   .option('-C, --copy <patterns>', 'copy files on change by patterns')
   .option('-c, --config <config>', 'config file. "jastyco.json" default')
-  .option('-X, --delete', 'delete dest file on delete source. "false" default')
+  .option('-X, --delete', 'delete dest file on delete source file. "false" default')
+  .option('--jade <jade>', 'jade options. ' + JSON.stringify(options.jade) + ' default')
+  .option('--coffee <coffee>', 'coffee options. ' + JSON.stringify(options.coffee) + ' default')
+  .option('--styl <styl>', 'stylus options. ' + JSON.stringify(options.styl) + ' default')
   .usage('[options] patterns');
 
 program.parse(process.argv);

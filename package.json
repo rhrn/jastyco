@@ -9,6 +9,7 @@
     "coffee-script": "~1.6.3",
     "commander": "~2.0.0",
     "globule": "~0.1.0",
+    "nib": "~1.0.1",
     "json5": "~0.2.0"
   },
   "bin": {

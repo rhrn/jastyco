@@ -22,12 +22,14 @@ var jastyco = {
     styl: {
       compile: function(src, options) {
         var copmiled;
-        stylus(src)
-          .set('filename', options.filename)
-          .render(function(err, css) {
-            copmiled = css;
-          });
-        return copmiled;
+        var styl = stylus(src).set('filename', options.filename);
+        if (options.nib) {
+          styl.include(require('nib').path);
+        }
+        styl.render(function(err, css) {
+          copmiled = css;
+        });
+        return copmiled || '';
       } 
     }
   },
@@ -119,11 +121,8 @@ exports.jastyco = function (options) {
 
         file = jastyco.file(files[j], options);
 
-        compileOptions = {
-          pretty: true,
-          bare: true,
-          filename: file.srcpath
-        }
+        compileOptions = options[file.srcext];
+        compileOptions.filename = file.srcpath;
 
         jastyco.compile('build', file, compileOptions);
 
@@ -161,11 +160,8 @@ exports.jastyco = function (options) {
         
         if (event === 'changed' || event === 'added') {
 
-          compileOptions = {
-            pretty: true,
-            bare: true,
-            filename: file.srcpath
-          }
+          compileOptions = options[file.srcext];
+          compileOptions.filename = file.srcpath;
 
           jastyco.compile(event, file, compileOptions);
 

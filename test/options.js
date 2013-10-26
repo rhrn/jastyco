@@ -44,6 +44,12 @@ describe('options test', function() {
     options.delete.should.equal(false);
     options.should.have.property('patterns');
     options.patterns.should.equal(options.patterns);
+    options.should.have.property('jade');
+    options.jade.should.be.an('object');
+    options.should.have.property('coffee');
+    options.coffee.should.be.an('object');
+    options.should.have.property('styl');
+    options.styl.should.be.an('object');
 
   });
 
@@ -57,6 +63,15 @@ describe('options test', function() {
       copy: 'copy', 
       delete: true,
       patterns: 'patterns', 
+      jade: {
+        pretty: false
+      },
+      coffee: {
+        bare: false
+      },
+      styl: {
+        nib: false
+      }
     }
 
     options = utils.extend(options, program);
@@ -73,6 +88,12 @@ describe('options test', function() {
     options.delete.should.equal(true);
     options.should.have.property('patterns');
     options.patterns.should.equal('patterns');
+    options.should.have.property('jade');
+    options.jade.pretty.should.equal(false);
+    options.should.have.property('coffee');
+    options.coffee.bare.should.equal(false);
+    options.should.have.property('styl');
+    options.styl.nib.should.equal(false);
 
   });
 

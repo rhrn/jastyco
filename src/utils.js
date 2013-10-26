@@ -1,4 +1,5 @@
 var fs = require('fs');
+var json5 = require('json5');
 var options = {}, keys = {}, key = '';
 var cwd = process.cwd();
 
@@ -60,12 +61,10 @@ module.exports = {
   },
 
   readConfig: function(configPath) {
-    var config = {};
     if (fs.existsSync(configPath)) {
-      // allow json strict mode only
-      config = JSON.parse(fs.readFileSync(configPath).toString());
+      return json5.parse(fs.readFileSync(configPath).toString());
     }
-    return config;
+    return {};
   }
 
 };

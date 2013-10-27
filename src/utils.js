@@ -33,6 +33,7 @@ module.exports = {
         bare: true
       },
       styl: {
+        compress: false,
         nib: true
       },
       src: '',

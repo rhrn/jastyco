@@ -26,6 +26,7 @@ var jastyco = {
         if (options.nib) {
           styl.include(require('nib').path);
         }
+        styl.set('compress', options.compress);
         styl.render(function(err, css) {
           copmiled = css;
         });

@@ -1,7 +1,12 @@
+# v0.0.7
+  * add compress option for stylus
+  * fix utils extend method
+  * fix utils optionToJson method
+
 # v0.0.6
   * custom jade, coffee options
   * stylus nib support
-  * fix options priority. 1:cli 2:config 3:defaults
+  * fix options priority. hi to low: cli, config, defaults
   * auto prefix src to patterns
   * json5 support
   * bug fixes and improve stability

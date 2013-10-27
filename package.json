@@ -1,6 +1,6 @@
 {
   "name": "jastyco",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Watch and compile jade, stylus, coffee-script files",
   "dependencies": {
     "gaze": "~0.4.3",
@@ -25,6 +25,7 @@
   "keywords": [
     "jade",
     "stylus",
+    "nib",
     "coffee-script",
     "compile",
     "watch"

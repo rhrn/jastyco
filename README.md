@@ -81,7 +81,7 @@ Options:
 -X, --delete               delete dest file on delete source file. "false" default
 --jade <jade>              jade options. {"pretty":true} default
 --coffee <coffee>          coffee options. {"bare":true} default
---styl <styl>              stylus options. {"nib":true} default
+--styl <styl>              stylus options. {"compress":false,"nib":true} default
 ```
 
 `jade` and `coffee` options pass to compiler. for `stylus` is one option to use `nib` extention  
@@ -104,6 +104,7 @@ Config `jastyco.json`
     "bare": true
   },
   "styl": {
+    "compress": false,
     "nib": true
   },
   "delete": true
@@ -119,7 +120,7 @@ or already css, js, fonts...
 * [stylus](http://learnboost.github.io/stylus/)
 * [nib](http://visionmedia.github.io/nib/)
 
-[Change log](CHANGES.md)
+[Change log](https://github.com/rhrn/jastyco/blob/master/CHANGES.md)
 
 #### Known issues
 * not watch for new directories. required relaunch `jastyco`

@@ -6,11 +6,7 @@ var cwd = process.cwd();
 var optionToJson = function(opt) {
 
   if (opt.charAt(0) !== '{') {
-    opt = '{' + opt;
-  }
-
-  if (opt.charAt(opt.length) !== '}') {
-    opt += '}';
+    opt = '{' + opt + '}';
   }
 
   try {

@@ -1,3 +1,11 @@
+# v0.0.6
+  * custom jade, coffee options
+  * stylus nib support
+  * fix options priority. 1:cli 2:config 3:defaults
+  * auto prefix src to patterns
+  * json5 support
+  * bug fixes and improve stability
+
 # v0.0.5
   * fix multiple copy pattern
   * fix unknown extension in file info

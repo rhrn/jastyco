@@ -57,7 +57,7 @@ And you can run simply
 jastyco
 ```
 
-To compile files in batch mode, run
+To compile files in batch mode, run:
 ```
 jastyco -b
 ```
@@ -78,7 +78,16 @@ Options:
 -p, --patterns <patterns>  files compile by patterns. "**/*.jade **/*.coffee **/*.styl" default
 -C, --copy <patterns>      copy files on change by patterns
 -c, --config <config>      config file. "jastyco.json" default
--X, --delete               delete dest file on delete source. "false" default
+-X, --delete               delete dest file on delete source file. "false" default
+--jade <jade>              jade options. {"pretty":true} default
+--coffee <coffee>          coffee options. {"bare":true} default
+--styl <styl>              stylus options. {"nib":true} default
+```
+
+`jade` and `coffee` options pass to compiler. for `stylus` is one option to use `nib` extention  
+Override options via cli, example:
+```
+jastyco --jade "pretty:false" --coffee "bare:false" --styl="nib:false"
 ```
 
 Config `jastyco.json`
@@ -87,14 +96,30 @@ Config `jastyco.json`
   "src": "src",
   "dest": "dest",
   "patterns": "**/*.coffee **/*.styl",
-  "copy": "**/*.jade src/**/*.css src/**/*.eot src/**/*.svg src/**/*.ttf src/**/*.woff",
+  "copy": "**/*.jade **/*.css **/*.eot **/*.svg **/*.ttf **/*.woff",
+  "jade": {
+    "pretty": true
+  },
+  "coffee": {
+    "bare": true
+  },
+  "styl": {
+    "nib": true
+  },
   "delete": true
 }
 ```
 
-Note: `copy` useful for frameworks which self compile,  
+Note: `copy` useful for frameworks which had self compile,  
 for example `express` use `jade` as template engine  
-or css, js, fonts...
+or already css, js, fonts...  
+
+* [jade](http://jade-lang.com/)
+* [coffee-script](http://coffeescript.org/)
+* [stylus](http://learnboost.github.io/stylus/)
+* [nib](http://visionmedia.github.io/nib/)
+
+[Change log](CHANGES.md)
 
 #### Known issues
-* not watch for new directories
+* not watch for new directories. required relaunch `jastyco`

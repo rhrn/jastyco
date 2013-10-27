@@ -8,7 +8,7 @@ var cwd = process.cwd();
 var cli;
 
 program
-  .version('0.0.5')
+  .version('0.0.6')
   .option('-b, --build', 'compile sources in batch mode. "false" default')
   .option('-s, --src <src>', 'source directory. current default')
   .option('-d, --dest <dest>', 'destination directory. current default')

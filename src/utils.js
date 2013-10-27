@@ -47,13 +47,21 @@ module.exports = {
 
   },
 
+  isJSON: function(o) {
+    return !!(o && typeof o === 'object' && !Array.isArray(o));
+  },
+
   extend: function extend(one, two) {
-    var extended = {}, key;
+    var _this = this, key, extended = {};
     for (key in one) {
       extended[key] = one[key];
     }
     for (key in two) {
-      extended[key] = two[key];
+      if (_this.isJSON(one[key]) && _this.isJSON(two[key])) {
+        extended[key] = _this.extend(one[key], two[key]);
+      } else {
+        extended[key] = two[key];
+      }
     }
     return extended;
   },

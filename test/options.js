@@ -11,12 +11,20 @@ describe('options test', function() {
 
     one = {
       one: "one",
-      override: "one"
+      override: "one",
+      obj: {
+        one: "one",
+        override: "one"
+      }
     };
 
     two = {
       two: "two",
-      override: "two"
+      override: "two",
+      obj: {
+        two: "two",
+        override: "two"
+      }
     };
 
     three = utils.extend(one, two);
@@ -25,7 +33,27 @@ describe('options test', function() {
     three.should.have.property('two');
     three.should.have.property('override');
     three.override.should.equal('two');
+    three.obj.one.should.equal('one');
+    three.obj.should.have.property('override');
+    three.obj.override.should.equal('two');
+    three.obj.should.have.property('two');
+    three.obj.two.should.equal('two');
 
+  });
+
+  it('should be detect json', function() {
+
+    one = utils.isJSON({});
+    one.should.to.be.true;
+    one = utils.isJSON([]);
+    one.should.to.be.false;
+    one = utils.isJSON(null);
+    one.should.to.be.false;
+    one = utils.isJSON(undefined);
+    one.should.to.be.false;
+    one = utils.isJSON('');
+    one.should.to.be.false;
+    
   });
 
   it('should be default options', function() {

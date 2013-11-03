@@ -10,7 +10,8 @@
     "commander": "~2.0.0",
     "globule": "~0.1.0",
     "nib": "~1.0.1",
-    "json5": "~0.2.0"
+    "json5": "~0.2.0",
+    "node-static": "~0.7.2"
   },
   "bin": {
     "jastyco": "./bin/jastyco"

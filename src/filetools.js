@@ -131,5 +131,19 @@ module.exports = {
     return patterns.map(function(pattern) {
       return options.src + pattern;
     });
+  },
+
+  staticServer: function(options) {
+    var static = require('node-static');
+    var fileServer = new static.Server('./' + options.dest, options.static);
+    var port = options.static.port;
+    require('http').createServer(function (request, response) {
+      request.addListener('end', function () {
+        fileServer.serve(request, response);
+      }).resume();
+    }).listen(port);
+    console.log ('(./' + options.dest + ') static server start at http://localhost:' + port);
+
   }
+
 };

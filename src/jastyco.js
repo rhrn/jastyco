@@ -84,6 +84,10 @@ exports.jastyco = function (options) {
   options.src = filetools.prepPath(options.src);
 
   console.log ('options:', "\n", options);
+  
+  if (options.static && !options.build) {
+    filetools.staticServer(options);
+  }
 
   if (options.build) {
     globule = require('globule');

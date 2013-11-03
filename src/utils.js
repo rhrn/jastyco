@@ -32,6 +32,9 @@ module.exports = {
         compress: false,
         nib: true
       },
+      static: {
+        port: 8050 
+      },
       src: '',
       dest: '',
       delete: false,
@@ -83,6 +86,7 @@ module.exports = {
         if (
           (key === 'jade'
           || key === 'coffee'
+          || key === 'static'
           || key === 'styl')
           && typeof program[key] === 'string'
         ) {

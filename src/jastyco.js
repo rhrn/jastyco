@@ -167,13 +167,33 @@ exports.jastyco = function (options) {
           jastyco.compile(event, file, compileOptions);
 
         } else if (event === 'deleted') {
-          if (options.delete === true) {
-            fs.unlink(file.destpath, function(err) {
-              console.log('deleted ', file.destpath);
+
+          setTimeout(function() {
+
+            fs.exists(srcpath, function(exists) {
+
+              if (exists) {
+
+                compileOption = options[file.srcext];
+                compileOptions.filename = file.srcpath;
+                jastyco.compile('changed', file, compileOptions);
+
+              } else {
+
+                if (options.delete === true) {
+                  fs.unlink(file.destpath, function(err) {
+                    console.log('deleted ', file.destpath);
+                  });
+                } else {
+                  console.log('did not deleted ', file.destpath);
+                }
+
+              }
+
             });
-          } else {
-            console.log('did not deleted ', file.destpath);
-          }
+
+          }, 300);
+
         }
 
       });

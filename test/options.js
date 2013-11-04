@@ -15,6 +15,9 @@ describe('options test', function() {
       obj: {
         one: "one",
         override: "one"
+      },
+      disabled: {
+        object: true
       }
     };
 
@@ -24,7 +27,8 @@ describe('options test', function() {
       obj: {
         two: "two",
         override: "two"
-      }
+      },
+      disabled: false
     };
 
     three = utils.extend(one, two);
@@ -38,6 +42,8 @@ describe('options test', function() {
     three.obj.override.should.equal('two');
     three.obj.should.have.property('two');
     three.obj.two.should.equal('two');
+    three.should.have.property('disabled');
+    three.disabled.should.to.be.false;
 
   });
 

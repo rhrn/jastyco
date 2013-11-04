@@ -5,6 +5,10 @@ var cwd = process.cwd();
 
 var optionToJson = function(opt) {
 
+  if (opt === 'false') {
+    return false;
+  }
+
   if (opt.charAt(0) !== '{') {
     opt = '{' + opt + '}';
   }
@@ -67,7 +71,7 @@ module.exports = {
 
   extractOptions: function(defaultOptions, program) {
 
-    var _this = this;
+    var _this = this, option;
 
     keys = Object.keys(defaultOptions);
 
@@ -90,7 +94,12 @@ module.exports = {
           || key === 'styl')
           && typeof program[key] === 'string'
         ) {
-          options[key] = _this.extend(defaultOptions[key], optionToJson(program[key]));
+          option = optionToJson(program[key]);
+          if (_this.isJSON(option)) {
+            options[key] = _this.extend(defaultOptions[key], option);
+          } else {
+            options[key] = option; 
+          }
         } else {
           options[key] = program[key];
         }

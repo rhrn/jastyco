@@ -2,7 +2,14 @@ var fs = require('fs');
 var gaze = require('gaze');
 var filetools = require('./filetools');
 
-var jade, coffee, stylus, globule;
+var jade, coffee, stylus, globule, io, socket, staticDest, globalOptions;
+var scriptAnchorRegEx = /\<\/body\>\s*\<\/html\>/g;
+var ioScript = '/socket.io/socket.io.js';
+var liveScript = '/socket.io/jastyco/livereload.js';
+
+var prepareScripts = function(file, options) {
+  return '<script src="//' + options.host + ':' + options.port + file + '"></script>';
+};
 
 var jastyco = {
 
@@ -10,7 +17,16 @@ var jastyco = {
     jade: {
       compile: function(src, options) {
         var copmiled = jade.compile(src, options);
-        return copmiled();
+        copmiled = copmiled();
+        if (globalOptions.livereload && !globalOptions.build) {
+          var match = copmiled.match(scriptAnchorRegEx);
+          if (match !== null) {
+            copmiled = copmiled.replace(scriptAnchorRegEx, ioScript + liveScript + match[0]);
+          } else {
+            copmiled += ioScript + liveScript;
+          }
+        }
+        return copmiled;
       }
     },
     coffee: {
@@ -55,6 +71,9 @@ var jastyco = {
         fs.writeFile(file.destpath, compiled, function(err) {
           if (!err) {
             console.log('%s %s to %s', event, file.srcpath, file.destpath);
+            if (socket && globalOptions.livereload[file.destext.substr(1)]) {
+              socket.emit('jastyco', event, file, staticDest);
+            }
           }
         });
 
@@ -71,6 +90,9 @@ var jastyco = {
       fs.writeFile(file.destcopy, data, function(err) {
         if (!err) {
           console.log('copy %s to %s', file.srcpath, file.destcopy);
+          if (socket && globalOptions.livereload[file.destext.substr(1)]) {
+            socket.emit('jastyco', 'copy', file, staticDest);
+          }
         }
       });
     });
@@ -87,6 +109,26 @@ exports.jastyco = function (options) {
   
   if (options.static && !options.build) {
     filetools.staticServer(options);
+  }
+
+  if (options.livereload && !options.build) {
+    if (options.livereload.staticDest) {
+      staticDest = filetools.prepPath(options.livereload.staticDest);
+    } else {
+      staticDest = options.dest;
+    }
+
+    ioScript   = prepareScripts(ioScript, options.livereload);
+    liveScript = prepareScripts(liveScript, options.livereload);
+
+    io = require('socket.io').listen(options.livereload.port, {log: false});
+    io.on('connection', function(sock) {
+      socket = sock;
+    });
+    io.settings.static.add('/jastyco/livereload.js', {
+      file: __dirname + '/livereload.js'
+    });
+    console.log('socket.io started: %s:%d', options.livereload.host, options.livereload.port);
   }
 
   if (options.build) {
@@ -111,6 +153,8 @@ exports.jastyco = function (options) {
   if (options.copy != '') {
     copy = filetools.patternsToArray(options.copy, options);
   }
+
+  globalOptions = options;
 
   var compileOptions;
 

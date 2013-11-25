@@ -39,6 +39,14 @@ module.exports = {
       static: {
         port: 8050 
       },
+      livereload: {
+        host: 'localhost',
+        port: 8070,
+        css: true,
+        js: true,
+        html: true,
+        staticDest: null
+      },
       src: '',
       dest: '',
       delete: false,
@@ -91,6 +99,7 @@ module.exports = {
           (key === 'jade'
           || key === 'coffee'
           || key === 'static'
+          || key === 'livereload'
           || key === 'styl')
           && typeof program[key] === 'string'
         ) {

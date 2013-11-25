@@ -20,6 +20,7 @@ program
   .option('--coffee <coffee>', 'coffee options. ' + JSON.stringify(options.coffee) + ' default')
   .option('--styl <styl>', 'stylus options. ' + JSON.stringify(options.styl) + ' default')
   .option('--static <static>', 'static options. ' + JSON.stringify(options.static) + ' default')
+  .option('--livereload <livereload>', 'livereload options. ' + JSON.stringify(options.livereload) + ' default')
   .usage('[options] patterns');
 
 program.parse(process.argv);

@@ -1,6 +1,7 @@
 var fs = require('fs');
 var gaze = require('gaze');
 var filetools = require('./filetools');
+var utils = require('./utils');
 
 var jade, coffee, stylus, globule, io, socket, staticDest, globalOptions;
 var scriptAnchorRegEx = /\<\/body\>\s*\<\/html\>/g;
@@ -63,11 +64,14 @@ var jastyco = {
 
   compile: function(event, file, options) {
 
+    var opt = utils.extend({}, options);
+
     fs.readFile(file.srcpath, function(err, data) {
 
       try {
 
-        compiled = jastyco.plugins[file.srcext].compile(data.toString(), options);
+        compiled = jastyco.plugins[file.srcext].compile(data.toString(), opt);
+
         fs.writeFile(file.destpath, compiled, function(err) {
           if (!err) {
             console.log('%s %s to %s', event, file.srcpath, file.destpath);
@@ -171,9 +175,11 @@ exports.jastyco = function (options) {
         file = jastyco.file(files[j], options);
 
         compileOptions = options[file.srcext];
-        compileOptions.filename = file.srcpath;
 
-        jastyco.compile('build', file, compileOptions);
+        if (compileOptions !== undefined) {
+          compileOptions.filename = file.srcpath;
+          jastyco.compile('build', file, compileOptions);
+        }
 
       }
 
@@ -210,9 +216,11 @@ exports.jastyco = function (options) {
         if (event === 'changed' || event === 'added') {
 
           compileOptions = options[file.srcext];
-          compileOptions.filename = file.srcpath;
 
-          jastyco.compile(event, file, compileOptions);
+          if (compileOptions !== undefined) {
+            compileOptions.filename = file.srcpath;
+            jastyco.compile(event, file, compileOptions);
+          }
 
         } else if (event === 'deleted') {
 

@@ -1,3 +1,9 @@
+# v0.0.9
+  * add css transition on styles update
+  * fix custom socket io host
+  * fix miss delete event compile options
+  * update packages
+
 # v0.0.8
   * livereload feature (alpha)
   * built-in static server

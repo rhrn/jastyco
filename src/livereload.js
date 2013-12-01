@@ -1,5 +1,7 @@
 (function(doc) {
 
+  var ioScriptRegex = /socket\.io\/socket\.io\.js/i;
+
   var scripts = doc.getElementsByTagName('script');
   var links = doc.getElementsByTagName('link');
   var resources = {}, source, parent, next, element;
@@ -18,12 +20,16 @@
 
   resources[html] = true;
 
-  var i, link, script, path;
+  var i, link, script, path, ioHost;
   for(i in scripts) {
     script = scripts[i];
     if (script.src) {
       path = getPath(script.src);
       resources[path] = script;
+
+      if (script.src.match(ioScriptRegex)) {
+        ioHost = script.src.replace(ioScriptRegex, '');
+      }
     }
   }
 
@@ -35,7 +41,7 @@
     }
   }
 
-  var socket = io.connect('http://localhost:8070');
+  var socket = io.connect(ioHost);
 
   socket.on('jastyco', function(event, file, dest) {
 

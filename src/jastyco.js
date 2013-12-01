@@ -230,9 +230,12 @@ exports.jastyco = function (options) {
 
               if (exists) {
 
-                compileOption = options[file.srcext];
-                compileOptions.filename = file.srcpath;
-                jastyco.compile('changed', file, compileOptions);
+                compileOptions = options[file.srcext];
+
+                if (compileOptions !== undefined) {
+                  compileOptions.filename = file.srcpath;
+                  jastyco.compile('changed', file, compileOptions);
+                }
 
               } else {
 

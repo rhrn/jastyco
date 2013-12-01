@@ -84,8 +84,10 @@ describe('options test', function() {
     options.coffee.should.be.an('object');
     options.should.have.property('styl');
     options.styl.should.be.an('object');
-    options.should.have.property('server');
-    options.server.should.be.an('object');
+    options.should.have.property('static');
+    options.static.should.be.an('object');
+    options.should.have.property('livereload');
+    options.livereload.should.be.an('object');
 
   });
 
@@ -108,7 +110,8 @@ describe('options test', function() {
       styl: {
         nib: false
       },
-      server: false
+      static: false,
+      livereload: false
     }
 
     options = utils.extend(options, program);
@@ -131,8 +134,10 @@ describe('options test', function() {
     options.coffee.bare.should.equal(false);
     options.should.have.property('styl');
     options.styl.nib.should.equal(false);
-    options.should.have.property('server');
-    options.server.should.equal(false);
+    options.should.have.property('static');
+    options.static.should.equal(false);
+    options.should.have.property('livereload');
+    options.livereload.should.equal(false);
 
   });
 

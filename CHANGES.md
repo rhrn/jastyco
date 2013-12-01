@@ -1,3 +1,10 @@
+# v0.0.8
+  * livereload feature (alpha)
+  * built-in static server
+  * add 'false' value in cli mode
+  * fix compile options fails
+  * fix miss 'delete' file event
+
 # v0.0.7
   * add compress option for stylus
   * fix utils extend method
